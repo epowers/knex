@@ -192,11 +192,15 @@ define(function(require, exports, module) {
         for (var i2 = 0, l2 = join.clauses.length; i2 < l2; i2++) {
           var clause = join.clauses[i2];
           clauses.push(
-            [clause['bool'], this.wrap(clause['first']), clause.operator, this.wrap(clause['second'])].join(' ')
+            [clause['bool']
+            , (clause['first'] instanceof Raw ? clause['first'].sql : this.wrap(clause['first']))
+            , clause.operator
+            , (clause['second'] instanceof Raw ? clause['second'].sql : this.wrap(clause['second']))
+            ].join(' ')
           );
         }
         clauses[0] = clauses[0].replace(/and |or /, '');
-        sql.push(join.type + ' join ' + this.wrapTable(join.table) + ' on ' + clauses.join(' '));
+        sql.push(join.type + ' join ' + (join.table instanceof Raw ? join.table.sql : this.wrapTable(join.table)) + ' on ' + clauses.join(' '));
       }
       return sql.join(' ');
     },
