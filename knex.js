@@ -502,9 +502,8 @@ define(function(require, exports, module) {
 
     // Switches the database client to the client for the named Instance
     using: function(name) {
-      var obj = this.clone();
-      obj.client = Knex.Instances[name].client;
-      return obj;
+      this.client = Knex.Instances[name].client;
+      return this;
     },
 
     // Resets all attributes on the query builder.
